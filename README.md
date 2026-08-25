@@ -11,7 +11,7 @@
 - **多收藏夹**：创建多个收藏夹分类管理
 - **移动收藏**：在收藏夹之间移动收藏项
 - **搜索**：按名称或内容搜索收藏
-- **持久化**：数据存储在浏览器 localStorage，刷新不丢失
+- **持久化**：数据存储在后端 `data/favorites.json`，重启不丢失
 
 ## 安装
 
@@ -25,7 +25,7 @@
 
 ## 技术实现
 
-- 纯前端实现，无后端节点
+- 前端扩展 + 后端 API（无自定义节点），收藏数据经后端持久化到 `data/favorites.json`
 - 照搬 ComfyUI-Prompt-Assistant 的节点挂载机制（双渲染模式：LiteGraph / Vue Nodes 2.0）
 - 悬浮按钮固定在文本框左下角（`bottom-left-h` 布局）
 - 折叠态点击穿透（`pointer-events: none`），悬停展开
@@ -35,6 +35,8 @@
 ```
 ComfyUI-Prompt-Favorites/
 ├── __init__.py                  # 插件入口，声明 WEB_DIRECTORY
+├── server.py                    # 后端服务，提供收藏数据读写 API
+├── data/                        # 运行时数据（favorites.json，已 gitignore）
 └── js/
     ├── index.js                 # 扩展注册 + 节点生命周期 Hook
     ├── modules/
@@ -43,7 +45,7 @@ ComfyUI-Prompt-Favorites/
     │   └── FavoritesPanel.js    # 收藏面板（弹窗）
     ├── services/
     │   ├── NodeMountService.js  # 节点挂载服务（双渲染模式）
-    │   └── favoritesStore.js    # localStorage 数据层
+    │   └── favoritesStore.js    # 后端 API 数据层
     ├── utils/
     │   ├── logger.js            # 日志
     │   ├── eventManager.js      # 事件管理
