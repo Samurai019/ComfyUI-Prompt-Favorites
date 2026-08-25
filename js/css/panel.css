@@ -1,0 +1,564 @@
+/**
+ * 收藏夹面板样式
+ */
+
+/* ==========================================================================
+   1. 面板容器
+   ========================================================================== */
+
+.pf-panel {
+    position: fixed;
+    z-index: 10180;
+    background-color: var(--p-content-background, #1e1e1e);
+    border: 1px solid var(--p-content-border-color, #444);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    width: 640px;
+    max-width: 90vw;
+    height: 520px;
+    max-height: 80vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(8px);
+    padding: 0;
+    transform-origin: top center;
+    will-change: transform, opacity;
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+.pf-panel-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.pf-panel-up {
+    animation: pf-clipFadeInDown 0.2s ease-in-out;
+}
+
+.pf-panel-down {
+    animation: pf-clipFadeInUp 0.2s ease-in-out;
+}
+
+.pf-panel-closing {
+    animation: pf-clipFadeOutUp 0.2s ease-in-out forwards;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   2. 标题栏
+   ========================================================================== */
+
+.pf-panel-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 10px;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.pf-panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--p-text-color, #e0e0e0);
+    white-space: nowrap;
+}
+
+.pf-panel-search-container {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.pf-panel-search-input {
+    width: 220px;
+    padding: 5px 10px;
+    background-color: color-mix(in srgb, var(--comfy-menu-secondary-bg, #2a2a2a), transparent 60%);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: var(--p-inputtext-color, #e0e0e0);
+    font-size: 12px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.pf-panel-search-input:focus {
+    border-color: var(--p-primary-500, #185FA5);
+    background-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 92%);
+    width: 260px;
+}
+
+.pf-panel-search-input::placeholder {
+    color: var(--p-text-muted-color, #888);
+}
+
+.pf-panel-btn {
+    background: none;
+    border: none;
+    color: var(--p-button-text-secondary-color, #aaa);
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    transition: all 0.2s ease;
+}
+
+.pf-panel-btn:hover {
+    color: var(--p-text-color, #e0e0e0);
+    background-color: color-mix(in srgb, var(--comfy-menu-secondary-bg, #2a2a2a), transparent 50%);
+}
+
+/* ==========================================================================
+   3. 主体区域
+   ========================================================================== */
+
+.pf-panel-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* 左侧收藏夹栏 */
+.pf-panel-sidebar {
+    width: 180px;
+    flex-shrink: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pf-folder-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    color: var(--p-text-color, #e0e0e0);
+    font-size: 12px;
+}
+
+.pf-folder-item:hover {
+    background-color: color-mix(in srgb, var(--comfy-menu-secondary-bg, #2a2a2a), transparent 70%);
+}
+
+.pf-folder-active {
+    background-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 80%);
+    color: var(--p-text-color, #e0e0e0);
+}
+
+.pf-folder-active:hover {
+    background-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 75%);
+}
+
+.pf-folder-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pf-folder-count {
+    flex-shrink: 0;
+    min-width: 20px;
+    text-align: center;
+    padding: 1px 6px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--p-text-muted-color, #aaa);
+    font-size: 11px;
+}
+
+.pf-folder-active .pf-folder-count {
+    background-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 50%);
+    color: var(--p-text-color, #e0e0e0);
+}
+
+.pf-folder-add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 6px 10px;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    background: none;
+    color: var(--p-text-muted-color, #aaa);
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.pf-folder-add-btn:hover {
+    border-color: var(--p-primary-500, #185FA5);
+    color: var(--p-text-color, #e0e0e0);
+    background-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 92%);
+}
+
+/* 右侧收藏项列表 */
+.pf-panel-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pf-empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--p-text-muted-color, #888);
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.pf-empty-icon {
+    width: 48px;
+    height: 48px;
+    opacity: 0.3;
+    margin-bottom: 12px;
+    color: var(--p-text-muted-color, #888);
+}
+
+.pf-empty-text {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.pf-empty-hint {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* 收藏卡片 */
+.pf-fav-card {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 10px 12px;
+    background-color: color-mix(in srgb, var(--comfy-menu-secondary-bg, #2a2a2a), transparent 70%);
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.pf-fav-card:hover {
+    border-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 50%);
+    background-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 92%);
+}
+
+.pf-fav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.pf-fav-name {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--p-text-color, #e0e0e0);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 2px 4px;
+    border-radius: 4px;
+    outline: none;
+    min-width: 0;
+}
+
+.pf-fav-name:focus {
+    background-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 88%);
+}
+
+.pf-fav-actions {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.pf-fav-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--p-text-muted-color, #aaa);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.pf-fav-action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--p-text-color, #e0e0e0);
+}
+
+.pf-fav-action-danger:hover {
+    background-color: rgba(226, 75, 74, 0.2);
+    color: #f09595;
+}
+
+.pf-fav-content {
+    color: var(--p-text-secondary-color, #ccc);
+    font-size: 12px;
+    line-height: 1.5;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.15);
+    max-height: 80px;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-word;
+    transition: background-color 0.15s;
+}
+
+.pf-fav-content:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.pf-fav-meta {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--p-text-muted-color, #888);
+    text-align: right;
+}
+
+/* ==========================================================================
+   4. 底部栏
+   ========================================================================== */
+
+.pf-panel-footer {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.pf-footer-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.pf-footer-btn-primary {
+    background-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 20%);
+    color: var(--p-text-color, #e0e0e0);
+    border-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 30%);
+}
+
+.pf-footer-btn-primary:hover {
+    background-color: var(--p-primary-500, #185FA5);
+    border-color: var(--p-primary-500, #185FA5);
+}
+
+.pf-footer-hint {
+    font-size: 11px;
+    color: var(--p-text-muted-color, #888);
+}
+
+/* ==========================================================================
+   5. 右键菜单
+   ========================================================================== */
+
+.pf-context-menu {
+    position: fixed;
+    z-index: 10190;
+    min-width: 140px;
+    background-color: var(--p-content-background, #2a2a2a);
+    border: 1px solid var(--p-content-border-color, #444);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    padding: 4px;
+    backdrop-filter: blur(8px);
+}
+
+.pf-context-menu-title {
+    padding: 6px 10px;
+    font-size: 11px;
+    color: var(--p-text-muted-color, #888);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 2px;
+}
+
+.pf-context-menu-item {
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--p-text-color, #e0e0e0);
+    font-size: 12px;
+    transition: background-color 0.15s;
+}
+
+.pf-context-menu-item:hover {
+    background-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 80%);
+}
+
+.pf-context-menu-danger {
+    color: #f09595;
+}
+
+.pf-context-menu-danger:hover {
+    background-color: rgba(226, 75, 74, 0.2);
+}
+
+.pf-context-menu-empty {
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--p-text-muted-color, #888);
+    text-align: center;
+}
+
+/* ==========================================================================
+   6. 确认/输入对话框
+   ========================================================================== */
+
+.pf-confirm-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: 10200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.pf-confirm-dialog.pf-confirm-visible {
+    opacity: 1;
+}
+
+.pf-confirm-content {
+    background-color: var(--p-content-background, #2a2a2a);
+    border: 1px solid var(--p-content-border-color, #444);
+    border-radius: 8px;
+    padding: 20px 24px;
+    width: 360px;
+    max-width: 90vw;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+}
+
+.pf-confirm-dialog.pf-confirm-visible .pf-confirm-content {
+    transform: scale(1);
+}
+
+.pf-confirm-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--p-text-color, #e0e0e0);
+    margin-bottom: 10px;
+}
+
+.pf-confirm-msg {
+    font-size: 12px;
+    color: var(--p-text-secondary-color, #ccc);
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.pf-input-dialog-input {
+    width: 100%;
+    padding: 6px 10px;
+    background-color: color-mix(in srgb, var(--comfy-menu-secondary-bg, #2a2a2a), transparent 50%);
+    border: 1px solid var(--p-content-border-color, #444);
+    border-radius: 4px;
+    color: var(--p-inputtext-color, #e0e0e0);
+    font-size: 13px;
+    outline: none;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+.pf-input-dialog-input:focus {
+    border-color: var(--p-primary-500, #185FA5);
+}
+
+.pf-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.pf-confirm-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--p-content-border-color, #444);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--p-text-color, #e0e0e0);
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.15s;
+}
+
+.pf-confirm-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.pf-confirm-ok {
+    background-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 20%);
+    border-color: color-mix(in srgb, var(--p-primary-500, #185FA5), transparent 30%);
+}
+
+.pf-confirm-ok:hover {
+    background-color: var(--p-primary-500, #185FA5);
+}
+
+/* ==========================================================================
+   7. 滚动条
+   ========================================================================== */
+
+.pf-panel-sidebar::-webkit-scrollbar,
+.pf-panel-main::-webkit-scrollbar {
+    width: 6px;
+}
+
+.pf-panel-sidebar::-webkit-scrollbar-track,
+.pf-panel-main::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.pf-panel-sidebar::-webkit-scrollbar-thumb,
+.pf-panel-main::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--p-text-muted-color, #888), transparent 50%);
+    border-radius: 3px;
+}
+
+.pf-panel-sidebar::-webkit-scrollbar-thumb:hover,
+.pf-panel-main::-webkit-scrollbar-thumb:hover {
+    background-color: var(--p-text-muted-color, #888);
+}

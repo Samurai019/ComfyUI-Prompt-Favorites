@@ -1,0 +1,243 @@
+/**
+ * ComfyUI-Prompt-Favorites 样式表
+ * 仿照 ComfyUI-Prompt-Assistant 的视觉风格
+ * 所有类名使用 pf- 前缀避免冲突
+ */
+
+/* ==========================================================================
+   1. 动画关键帧
+   ========================================================================== */
+
+@keyframes pf-inputHighlight {
+    0% { background-color: transparent; }
+    20% { background-color: rgba(93, 243, 146, 0.15); }
+    100% { background-color: transparent; }
+}
+
+@keyframes pf-clipFadeInUp {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pf-clipFadeInDown {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pf-clipFadeOutUp {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes pf-clipFadeOutDown {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes pf-indicatorInit {
+    0% { opacity: 0; transform: scale(0.3); }
+    60% { opacity: 1; transform: scale(1.15); }
+    100% { opacity: var(--pf-icon-opacity, 0.8); transform: scale(1); }
+}
+
+.pf-input-highlight {
+    animation: pf-inputHighlight 0.6s ease-out;
+}
+
+/* ==========================================================================
+   2. 悬浮按钮容器
+   ========================================================================== */
+
+.pf-assistant-container {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: auto !important;
+    height: auto !important;
+    min-width: 0;
+    min-height: 0;
+    box-sizing: border-box;
+    padding: 2px;
+    background-color: color-mix(in srgb, var(--node-component-header-surface, #2a2a2a), transparent 60%);
+    border: 1px solid color-mix(in srgb, var(--p-panel-border-color, #444), transparent 60%);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    opacity: 0.95;
+    backdrop-filter: blur(4px);
+    user-select: none;
+    overflow: hidden;
+    pointer-events: all;
+    cursor: default;
+    transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                background-color 0.3s,
+                border-color 0.3s,
+                backdrop-filter 0.3s,
+                box-shadow 0.3s;
+}
+
+.pf-assistant-container * {
+    box-sizing: border-box;
+}
+
+/* 展开状态 */
+.pf-assistant-container.pf-expanded {
+    width: var(--pf-expanded-width, 28px) !important;
+    height: 28px !important;
+}
+
+/* 折叠状态 */
+.pf-assistant-container.pf-collapsed {
+    width: 28px !important;
+    height: 28px !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
+}
+
+/* ==========================================================================
+   3. 悬停区域与指示器
+   ========================================================================== */
+
+.pf-hover-area {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    bottom: -10px;
+    left: -10px;
+    z-index: -1;
+    pointer-events: auto;
+    background: transparent;
+}
+
+.pf-indicator {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(1);
+    transition: opacity 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pf-assistant-container.pf-collapsed .pf-indicator {
+    opacity: var(--pf-icon-opacity, 0.55);
+    pointer-events: auto;
+    color: var(--p-text-muted-color, #999);
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+}
+
+.pf-assistant-container.pf-expanded .pf-indicator {
+    opacity: 0;
+    transform: scale(0);
+}
+
+.pf-indicator-init {
+    animation: pf-indicatorInit 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 左下角定位 —— 与展开态按钮位置对齐：padding(2)+margin(2)=4px */
+.pf-layout-bottom-left-h .pf-indicator {
+    bottom: 4px;
+    left: 4px;
+}
+
+/* ==========================================================================
+   4. 内容区与按钮
+   ========================================================================== */
+
+.pf-content {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+    transition: opacity 0.3s ease;
+}
+
+.pf-assistant-container.pf-collapsed .pf-content {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.pf-assistant-container.pf-expanded .pf-content {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pf-layout-bottom-left-h .pf-content {
+    justify-content: flex-start;
+}
+
+.pf-svg-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.pf-svg-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    stroke: currentColor;
+    color: inherit;
+    transition: all 0.2s;
+    vertical-align: middle;
+}
+
+.pf-assistant-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    margin: 2px;
+    border: none;
+    border-radius: 3px;
+    background-color: transparent;
+    color: var(--p-dialog-color, #e0e0e0);
+    cursor: pointer;
+    opacity: 0;
+    flex-shrink: 0;
+    position: relative;
+    transition: transform 0.15s, opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s;
+}
+
+.pf-assistant-button .pf-svg-icon {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+}
+
+.pf-assistant-button:hover {
+    opacity: 1;
+    transform: scale(1.15);
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.pf-assistant-button:active {
+    transform: scale(0.95);
+}
+
+.pf-assistant-container.pf-collapsed .pf-assistant-button {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition-delay: 0s !important;
+}
+
+.pf-assistant-container.pf-expanded .pf-assistant-button {
+    opacity: 0.85;
+    pointer-events: auto;
+}
